@@ -2,9 +2,11 @@ Package: genosyncR
 Title: Determine Samples from Hashes and Genotypes
 Version: 0.0.0.9000
 Authors@R: 
-    person("Rachel", "Ferina", , "rferina@fredhutch.org", role = c("aut", "cre"),
+    person("Rachel", "Ferina", "rferina@fredhutch.org", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0006-8870-3545"))
-Description: What the package does (one paragraph).
+Description: To demultiplex pooled samples from hash data, two methods are run: kmeans combined with apriori 
+    association analysis, and logistic regression. The outputs of these methods are compared, increasing
+    confidence in sample assignment results when the two independent methods agree.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
