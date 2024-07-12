@@ -8,18 +8,18 @@
 #' @usage logisync(seu_obj, csv, soup_k, output_col='FinalAssignment', res=FALSE)
 #'
 #'
-#' @param seu_obj The input Seurat object. Must contain hash assay named 'HTO' or 'hto' in dgCMatrix format.
-#' Must contain Souporcell genotype assay(s) named GENO or geno with the desired k value (ex: 'GENO5'). 
-#' Assumes Souporcell was run renaming all multiplet designations to 'multiplet' (see viewmastR
-#' add_souporcell_seurat documentation for rename_assignments).
+#' @param seu_obj The input Seurat object. Must contain hash assay named \code{HTO} or \code{hto} in dgCMatrix format.
+#' Must contain Souporcell genotype assay(s) named \code{GENO} or \code{geno} with the desired k value (ex: \code{GENO5}). 
+#' Assumes Souporcell was run renaming all multiplet designations to 'multiplet' (see [viewmastR::add_souporcell_seurat()]
+#' documentation).
 #'
-#' @param csv The input hash-sample csv file path. The csv must contain Hash and Sample columns.
+#' @param csv The input hash-sample csv file path. The csv must contain \code{Hash} and \code{Sample} columns.
 #'
 #' @param soup_k The desired Souporcell run, indicating the number of genotypes detected. The appropriate 
 #' number of genotypes expected for the data should be determined prior to running kmeansync. 
 #'
 #' @param output_col The name for the sample assignments column that will be added to the output Seurat object.
-#' Default is 'FinalAssignment'.
+#' Default is \code{FinalAssignment}.
 #'
 #' @param res Boolean indicating additional results output. Default is FALSE. If TRUE, Seurat object with sample 
 #' and hash labels will be returned, along with a dataframe with False Discovery Rate (FDR) and a statistical significance
@@ -27,7 +27,7 @@
 #' Also returns a dataframe linking genotypes to samples, and a graph of the average marginal effects for each genotype.
 #'
 #' @return seu_obj Returns Seurat object with sample and hash labels by default. Note that multiplets have been excluded.
-#' If res=TRUE, additional dataframes and graphs are returned as well.
+#' If \code{res=TRUE}, additional dataframes and graphs are returned as well.
 #'
 #'
 #'

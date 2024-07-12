@@ -1,17 +1,16 @@
 #' @title \code{kmeansync}
 #'
 #' @description \code{kmeansync} To demultiplex pooled samples, runs kmeans on hash data from an input Seurat object.
-#' The optimal number of clusters for kmeans is selected with the silhouette method. Hashes are assigned to kmeans clusters
-#' based on the average hash enrichment in each cluster. Apriori association rules analysis links the hashes from kmeans 
-#' clusters to Souporcell genotypes. Then, genotypes can be linked to samples via the input hash-sample csv. 
+#' Hashes are assigned to kmeans clusters based on the average hash enrichment in each cluster. Apriori association rules 
+#' links hashes from kmeans clusters to Souporcell genotypes. Then, genotypes can be linked to samples via the input hash-sample csv. 
 #'
 #' @usage kmeansync(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignment', res=FALSE)
 
 #'
-#' @param seu_obj The input Seurat object. Must contain hash assay named 'HTO' or 'hto' in dgCMatrix format.
-#' Must contain Souporcell genotype assay(s) named GENO or geno with the desired k value (ex: 'GENO5'). 
-#' Assumes Souporcell was run renaming all multiplet designations to 'multiplet' (see viewmastR
-#' add_souporcell_seurat documentation for rename_assignments).
+#' @param seu_obj The input Seurat object. Must contain hash assay named \code{HTO} or \code{hto} in dgCMatrix format.
+#' Must contain Souporcell genotype assay(s) named \code{GENO} or \code{geno} with the desired k value (ex: \code{GENO5}). 
+#' Assumes Souporcell was run renaming all multiplet designations to 'multiplet' (see [viewmastR::add_souporcell_seurat()]
+#' documentation).
 #'
 #' @param csv The input hash-sample csv file path. The csv must contain \code{Hash} and \code{Sample} columns.
 #'
@@ -22,7 +21,7 @@
 #' Default is 0.8, as recommended.
 #'
 #' @param output_col The name for the sample assignments column that will be added to the output Seurat object.
-#' Default is 'FinalAssignment'.
+#' Default is \code{FinalAssignment}.
 #'
 #' @param res Boolean indicating additional results output. Default is FALSE. If TRUE, Seurat object with sample 
 #' and hash labels will be returned, along with a dataframe linking kmeans clusters to genotypes, a dataframe 
@@ -30,7 +29,7 @@
 #' a graph of kmeans clustering, shaded with average hash per cluster.
 #'
 #' @return seu_obj Returns Seurat object with sample and hash labels by default. Note that multiplets have been excluded.
-#' If res=TRUE, additional dataframes and graphs are returned as well.
+#' If \code{res=TRUE}, additional dataframes and graphs are returned as well.
 #'
 #'
 #'

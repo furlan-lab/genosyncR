@@ -1,19 +1,17 @@
 #' @title \code{genosync}
 #'
-#' @description \code{genosync} To demultiplex pooled samples, this wrapper function runs two methods on hash data from 
-#' an input Seurat object. The first method combines kmeans and apriori association analysis, see documentation for kmeansync. 
-#' The second method runs binary logistic regression, see documentation for logisync. The outputs of both methods will be 
-#' compared for all Souporcell runs to see which runs have consensus when assigning genotypes to samples, and matching results
-#' will be output. If there are no matches, all results will be output. 
+#' @description \code{genosync} To demultiplex pooled samples, this wrapper function runs two independent methods on hash data from 
+#' an input Seurat object. The first method combines kmeans and apriori association analysis, [kmeansync()]. 
+#' The second method runs binary logistic regression, [logisync()]. Compares both methods for all Souporcell runs,
+#' and outputs matching results. If there are no matches, all results will be output. 
 #'
 #' @usage genosync(seu_obj, hash_csv, max_soup_run)
 #'
-#' @param seu_obj The input Seurat object. Must contain hash assay named 'HTO' or 'hto' in dgCMatrix format.
-#' Must contain Souporcell genotype assay(s) named GENO or geno with the desired k value (ex: 'GENO5'). 
-#' Assumes Souporcell was run renaming all multiplet designations to 'multiplet' (see viewmastR
-#'  add_souporcell_seurat documentation for rename_assignments).
+#' @param seu_obj The input Seurat object. Must contain hash assay named \code{HTO} or \code{hto} in dgCMatrix format.
+#' Must contain Souporcell genotype assays named \code{GENO} or \code{geno} with the desired k value (ex: \code{GENO5}). 
+#' Assumes Souporcell was run renaming all multiplet designations to 'multiplet' (see [viewmastR::add_souporcell_seurat()]).
 #'
-#' @param hash_csv The input hash-sample csv file path. The csv must contain Hash and Sample columns.
+#' @param hash_csv The input hash-sample csv file path. The csv must contain \code{Hash} and \code{Sample} columns.
 #' 
 #' @param max_soup_run The highest Souporcell run, indicating the number of genotypes detected. Default is 8.
 #'
