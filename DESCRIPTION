@@ -1,0 +1,26 @@
+Package: genosyncR
+Title: Determine Samples from Hashes and Genotypes
+Version: 0.0.0.9000
+Authors@R: 
+    person("Rachel", "Ferina", , "rferina@fredhutch.org", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0006-8870-3545"))
+Description: What the package does (one paragraph).
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Imports:
+    logistf,
+    stats,
+    ggforce,
+    factoextra,
+    dplyr,
+    arules,
+    PNWColors,
+    umap,
+    Seurat,
+    SeuratObject,
+    utils,
+    methods,
+    ggplot2,
+    magrittr
