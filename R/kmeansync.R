@@ -69,7 +69,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
     stop('Input seurat object must contain a hash assay named HTO or hto.')}
   
   # check HTO matrix
-  if(inherits(seu_obj@assays$HTO$counts) != "dgCMatrix"){
+  if(!inherits(seu_obj@assays$HTO$counts, "dgCMatrix")){
     stop('HTO assay formatted incorrectly in seurat object. HTO assay counts must be a dgCMatrix.')}
   
   # ensure seu_obj has GENO assay
