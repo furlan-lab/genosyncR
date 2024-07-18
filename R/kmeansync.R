@@ -163,15 +163,16 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   # apriori association between kmeans clusters and genotypes
   apriori_data <- data %>% dplyr::select(!!sym(geno_col), cluster) %>% dplyr::mutate_all(as.factor) %>% as("transactions")
   rules <- arules::apriori(apriori_data, parameter = list(support = 0.05, confidence = conf, minlen=2), control=list(verbose = FALSE))
-  
+ 
   # Link hashes to association results
   pairs <- data.frame() 
-  # only keep rules with lift > 2 (indicates likelihood, 1 = not likely)
-  sig_rules <- arules::subset(rules, subset = lift > 1.5)
+  # only keep rules with lift > 1.5 (indicates likelihood, 1 = not likely)
+  sig_rules <- arules::subset(rules, subset = lift > 1.5) # removed arules::
   # extract rule pairs
   for (i in 1:length(sig_rules)) {
-    lhs_string <- labels(lhs(sig_rules[i]))
-    rhs_string <- labels(rhs(sig_rules[i]))
+    lhs_string <- as(lhs(sig_rules[i]), 'list')
+    rhs_string <- as(rhs(sig_rules[i]), 'list')
+    
     # merge lhs and rhs 
     pair <- paste(lhs_string, rhs_string, sep = " ")
     # add to df
@@ -197,21 +198,21 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   }
   
   # extract data values
-  pairs$cluster <- gsub(".*=(\\d+)\\}.*", "\\1", pairs$cluster) 
-  pairs[[geno_col]] <- gsub(".*=(\\d+)\\}.*", "\\1", pairs[[geno_col]])
+  pairs$cluster <- gsub(".*=(\\d+).*", "\\1", pairs$cluster)
+  pairs[[geno_col]] <- gsub(".*=(\\d+).*", "\\1", pairs[[geno_col]])
   
   # note if any genotypes weren't assigned
   missing_genotype <- setdiff(unique(data[[geno_col]]), unique(pairs[[geno_col]]))
   if(length(missing_genotype) > 0){
     message(paste0('No association rules found for genotype: ', missing_genotype, "\n"))
   }
-  
+
   # merge with hash assignments, rename columns
   HTO_map <- base::merge(pairs, cluster_assignments, by = "cluster", all.x = TRUE)
   colnames(HTO_map) <- c('Kmeans', 'Soup', 'Hash')
-  
+
   # merge with sample assignments from input csv
-  association <- base::merge(hash_table, HTO_map, by=('Hash'))
+  association <- base::merge(hash_table, HTO_map, by='Hash')
   
   # add hash and sample assignment columns to data
   data <- data %>% dplyr::rowwise() %>%
