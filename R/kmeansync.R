@@ -2,7 +2,7 @@
 #'
 #' @description \code{kmeansync} To demultiplex pooled samples, runs kmeans on hash data from an input Seurat object.
 #' Hashes are assigned to kmeans clusters based on the average hash enrichment in each cluster. Apriori association rules 
-#' links hashes from kmeans clusters to Souporcell genotypes. Then, genotypes can be linked to samples via the input hash-sample csv. 
+#' link hashes from kmeans clusters to Souporcell genotypes. Then, genotypes can be linked to samples via the input hash-sample csv. 
 #'
 #' @usage kmeansync(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignment', res=FALSE)
 
