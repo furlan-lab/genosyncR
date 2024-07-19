@@ -27,6 +27,7 @@ results
 **Inputs:**
 * Seurat object with Souporcell and HTO assays
 * Hash-Sample csv
+[csv.pdf](https://github.com/user-attachments/files/16315738/csv.pdf)
 
 
 **Outputs:**
@@ -35,19 +36,14 @@ results
      * If no runs agree, all results for all Souporcell runs
 
 
+[genosync_res.pdf](https://github.com/user-attachments/files/16315734/genosync_res.pdf)
 
 **A.** The average marginal effects show the influence each hash has on each Souporcell genotype.
-
 **B.** Dataframe of statistical evidence that the assigned hash has an effect on the genotype. The statistical significance indicator * appears when the False Discovery Rate < 0.1.
-
 **C.** The optimal number of clusters for kmeans, selected via the silhouette method.
-
 **D.** A UMAP of kmeans clustering, shaded with average hash enrichment per cluster. Dimensionality of data is reduced via UMAP prior to kmeans running.
-
 **E.** Apriori association rules, linking kmeans clusters to genotypes. High confidence and lift demonstrate stronger associations. Note that association rules may not be found for all genotypes or kmeans clusters, indicating a poor fit of the Souporcell run.
-
 **F.** Dataframe linking kmeans clusters to Souporcell genotypes.
-
 **G.** Dataframe linking samples to genotypes. Consensus between kmeansync and logisync results was found for Souporcell = 3.
 
 
