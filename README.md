@@ -2,7 +2,7 @@
 
 Demultiplex pooled samples from hash data with confidence. Two methods are incorporated in the genosync function: kmeans combined with apriori association analysis, and logistic regression. The outputs of these methods are benchmarked, increasing confidence in sample assignment results when the two independent methods agree.
 
-Multiple [Souporcell](https://github.com/wheaton5/souporcell) runs are iterated through to determine the number of genotypes that best fits the data. However, if the number of genotypes is known, it can be specified with the `max_soup_run` parameter.  
+Multiple [Souporcell](https://github.com/wheaton5/souporcell) runs are iterated through to determine the number of genotypes that best fits the data. However, if the number of genotypes is known, it can be specified with the `max_soup_run` parameter. Souporcell multiplets are excluded from this analysis. 
     
 ### kmeansync    
 The optimal number of clusters for kmeans is selected with the silhouette method. Hashes are assigned to kmeans clusters based on the average hash enrichment in each cluster. Apriori association rules analysis
@@ -28,6 +28,9 @@ results
 * Seurat object with Souporcell and HTO assays
 * Hash-Sample csv
 
+![csv](https://github.com/user-attachments/assets/0196f893-3172-4552-8a08-5c728eb2e59a)
+* Optional: Number of Souporcell runs to iterate through
+
 
 **Outputs:**
 * Seurat object, labeled with Samples and Hashes
@@ -35,6 +38,8 @@ results
      * If no runs agree, all results for all Souporcell runs
 
 
+
+![genosync_res](https://github.com/user-attachments/assets/34178109-0cc3-426e-ae19-5e12a78e0c9a)
 
 **A.** The average marginal effects show the influence each hash has on each Souporcell genotype.
 
@@ -49,6 +54,7 @@ results
 **F.** Dataframe linking kmeans clusters to Souporcell genotypes.
 
 **G.** Dataframe linking samples to genotypes. Consensus between kmeansync and logisync results was found for Souporcell = 3.
+
 
 
 
