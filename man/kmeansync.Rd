@@ -35,7 +35,7 @@ If \code{res=TRUE}, additional dataframes and graphs are returned as well.
 \description{
 \code{kmeansync} To demultiplex pooled samples, runs kmeans on hash data from an input Seurat object.
 Hashes are assigned to kmeans clusters based on the average hash enrichment in each cluster. Apriori association rules
-links hashes from kmeans clusters to Souporcell genotypes. Then, genotypes can be linked to samples via the input hash-sample csv.
+link hashes from kmeans clusters to Souporcell genotypes. Then, genotypes can be linked to samples via the input hash-sample csv.
 }
 \examples{
 \dontrun{
