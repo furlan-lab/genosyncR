@@ -4,7 +4,7 @@
 \alias{kmeansync}
 \title{\code{kmeansync}}
 \usage{
-kmeansync(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignment', res=FALSE)
+kmeansync(seu_obj, hash_csv, soup_k, conf=0.8, output_col='FinalAssignment', res=FALSE)
 }
 \arguments{
 \item{seu_obj}{The input Seurat object. Must contain hash assay named \code{HTO} or \code{hto} in dgCMatrix format.
@@ -12,7 +12,7 @@ Must contain Souporcell genotype assay(s) named \code{GENO} or \code{geno} with 
 Assumes Souporcell was run renaming all multiplet designations to 'multiplet' (see \code{\link[viewmastR:add_souporcell_seurat]{viewmastR::add_souporcell_seurat()}}
 documentation).}
 
-\item{csv}{The input hash-sample csv file path. The csv must contain \code{Hash} and \code{Sample} columns.}
+\item{hash_csv}{The input hash-sample csv file path. The csv must contain \code{Hash} and \code{Sample} columns.}
 
 \item{soup_k}{The desired Souporcell run, indicating the number of genotypes detected. The appropriate
 number of genotypes expected for the data should be determined prior to running kmeansync.}
@@ -40,9 +40,9 @@ link hashes from kmeans clusters to Souporcell genotypes. Then, genotypes can be
 \examples{
 \dontrun{
 
- output_list4 <- kmeansync(seu, csv='/path/to/hash_sampleABCD.csv', soup_k=4, res=TRUE)
+ output_list4 <- kmeansync(seu, hash_csv='/path/to/hash_sampleABCD.csv', soup_k=4, res=TRUE)
  
- seu6 <- kmeansync(seu, csv='/path/to/hash_sampleDEF.csv', soup_k=6, output_col='Sample_Assignment') 
+ seu6 <- kmeansync(seu, hash_csv='/path/to/hash_sampleDEF.csv', soup_k=6, output_col='Sample_Assignment') 
   
 }
 
