@@ -1,4 +1,4 @@
-# genosyncR: Sync Samples to Genotypes via Hashes
+# genosyncR: Sync Samples to Genotypes via Explainable Machine Learning Techniques
 
 Demultiplex pooled samples from hash data with confidence. Two methods are incorporated in the genosync function: kmeans combined with apriori association analysis, and logistic regression. The outputs of these methods are benchmarked, increasing confidence in sample assignment results when the two independent methods agree.
 
