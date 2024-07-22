@@ -38,16 +38,22 @@ genosync <- function(seu_obj, hash_csv, max_soup_run=8){
   # find min number for souporcell runs
   hashtable <- read.csv(hash_csv) 
   min_genos <- length(unique(hashtable$Hash))
+
+  # check if max_soup_run numbers are valid
+  patterns <- lapply(min_genos:max_soup_run, function(num){paste0('GENO', num)})
+  matches <- sapply(patterns, function(pattern) any(grepl(pattern, names(seu_obj@assays), ignore.case = TRUE)))
+  if(!all(matches)){
+    stop('Input seurat object missing a genotype assay named GENO or geno with the desired k value (ex: GENO5). Check max_soup_run value.')}
   
   outs_kmean <- list()
   outs_log <- list()
   # iterate over souporcell, run kmeans and log reg
   for(soup_num in c(min_genos:max_soup_run)){
     message(paste0("\n", "Running kmeansync for souporcell = ", soup_num, "\n"))
-    outs_kmean[[paste0('Soup_', soup_num)]] <- kmeansync(seu_obj, csv=hash_csv, soup_k=soup_num, res=TRUE)
+    outs_kmean[[paste0('Soup_', soup_num)]] <- kmeansync(seu_obj, hash_csv=hash_csv, soup_k=soup_num, res=TRUE)
     
     message(paste0("\n", "Running logisync for souporcell = ", soup_num, "\n"))
-    outs_log[[paste0('Soup_', soup_num)]] <- logisync(seu_obj, csv=hash_csv, soup_k=soup_num, res=TRUE)
+    outs_log[[paste0('Soup_', soup_num)]] <- logisync(seu_obj, hash_csv=hash_csv, soup_k=soup_num, res=TRUE)
     message(strrep("_", 75))
   }
   
