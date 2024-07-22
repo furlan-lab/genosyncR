@@ -4,7 +4,7 @@
 #' Hashes are assigned to kmeans clusters based on the average hash enrichment in each cluster. Apriori association rules 
 #' link hashes from kmeans clusters to Souporcell genotypes. Then, genotypes can be linked to samples via the input hash-sample csv. 
 #'
-#' @usage kmeansync(seu_obj, hash_csv, soup_k, conf=0.8, output_col='FinalAssignment', res=FALSE)
+#' @usage kmeansync(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignment', res=FALSE)
 
 #'
 #' @param seu_obj The input Seurat object. Must contain hash assay named \code{HTO} or \code{hto} in dgCMatrix format.
@@ -12,7 +12,7 @@
 #' Assumes Souporcell was run renaming all multiplet designations to 'multiplet' (see [viewmastR::add_souporcell_seurat()]
 #' documentation).
 #'
-#' @param hash_csv The input hash-sample csv file path. The csv must contain \code{Hash} and \code{Sample} columns.
+#' @param csv The input hash-sample csv file path. The csv must contain \code{Hash} and \code{Sample} columns.
 #'
 #' @param soup_k The desired Souporcell run, indicating the number of genotypes detected. The appropriate 
 #' number of genotypes expected for the data should be determined prior to running kmeansync. 
@@ -36,9 +36,9 @@
 #' @examples
 #' \dontrun{
 #' 
-#'  output_list4 <- kmeansync(seu, hash_csv='/path/to/hash_sampleABCD.csv', soup_k=4, res=TRUE)
+#'  output_list4 <- kmeansync(seu, csv='/path/to/hash_sampleABCD.csv', soup_k=4, res=TRUE)
 #'  
-#'  seu6 <- kmeansync(seu, hash_csv='/path/to/hash_sampleDEF.csv', soup_k=6, output_col='Sample_Assignment') 
+#'  seu6 <- kmeansync(seu, csv='/path/to/hash_sampleDEF.csv', soup_k=6, output_col='Sample_Assignment') 
 #'   
 #' }
 #'
@@ -57,7 +57,7 @@
 #' 
 #' @export
 
-kmeansync <- function(seu_obj, hash_csv, soup_k, conf=0.8, output_col='FinalAssignment', res=FALSE){
+kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignment', res=FALSE){
   
   UMAP1 <- UMAP2 <- lift <- cluster <- NULL
   
@@ -83,11 +83,12 @@ kmeansync <- function(seu_obj, hash_csv, soup_k, conf=0.8, output_col='FinalAssi
   geno_col <- paste0('geno', soup_k)
   seu_obj <- subset(seu_obj, cells=which(seu_obj@meta.data[[geno_col]] != 'Multiplet'))
   # normalize data for kmeans
+  seu_obj <- NormalizeData(seu_obj, normalization.method = "CLR", margin = 1)
   # scale data for kmeans
   seu_obj <- ScaleData(seu_obj)
   
   # read in csv
-  hash_table <- read.csv(hash_csv) 
+  hash_table <- read.csv(csv) 
   
   # preprocess data
   data <- Seurat::FetchData(seu_obj, c(unique(hash_table$Hash), geno_col))
