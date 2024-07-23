@@ -145,7 +145,7 @@ logisync <- function(seu_obj, csv, soup_k, output_col='FinalAssignment', res=FAL
   # iterate over named list
   for(soup in names(regs)){
     # interpret influence of each hash on genotype
-    df_dx <- data.frame(df.dx = margins[[soup]], SE = stderr[[col]])
+    df_dx <- data.frame(df.dx = margins[[soup]], SE = stderr[[soup]])
     # calculate z values, p values (two-tailed)
     df_dx$z <- df_dx$df.dx / df_dx$SE
     df_dx$P_value <- 2 * (1 - pnorm(abs(df_dx$z)))
