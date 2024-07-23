@@ -132,7 +132,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
     representative_HTO = representative_HTO)
   
   # UMAP K means cluster graph with hash assignments
-  cluster_palette <- PNWColors::pnw_palette("Sailboat",6,type="discrete")
+  cluster_palette <- PNWColors::pnw_palette("Sailboat", optimal_k)
   # add color col to separate cluster_assignments df
   cluster_assignments_col <- cluster_assignments %>% mutate(colors=cluster_palette[1:nrow(cluster_assignments)])
   # order by cluster
