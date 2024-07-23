@@ -118,7 +118,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   data$cluster <- as.numeric(kmeans_res$cluster)
   
   # Assign hashes to kmeans clusters:
-  hto_columns <- grep("HTO", colnames(data), value = TRUE)
+  hto_columns <- setdiff(colnames(data), c('cluster', geno_col))
   numeric_hto_columns <- sapply(data[hto_columns], is.numeric)
   
   # calculate average HTO enrichment per cluster
@@ -167,7 +167,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   # Link hashes to association results
   pairs <- data.frame() 
   # only keep rules with lift > 1.5 (indicates likelihood, 1 = not likely)
-  sig_rules <- arules::subset(rules, subset = lift > 1.5) # removed arules::
+  sig_rules <- arules::subset(rules, subset = lift > 1.5) 
   # extract rule pairs
   for (i in 1:length(sig_rules)) {
     lhs_string <- as(lhs(sig_rules[i]), 'list')
