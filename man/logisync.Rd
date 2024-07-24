@@ -38,9 +38,9 @@ Note that binary Firth logistic regression will be run for genotypes with small 
 \examples{
 \dontrun{
 
- output_list4 <- logisync(seu, csv='/path/to/hash_sampleABCD.csv', soup_k=4, res=TRUE)
+ output_list4 <- logisync(seu_ABCD, csv='/path/to/hash_sampleABCD.csv', soup_k=4, res=TRUE)
  
- seu5 <- logisync(seu, csv='/path/to/hash_sampleDEF.csv', soup_k=5, output_col='Sample_Assignment') 
+ seu5 <- logisync(seu_DEF, csv='/path/to/hash_sampleDEF.csv', soup_k=5, output_col='Sample_Assignment') 
   
 }
 

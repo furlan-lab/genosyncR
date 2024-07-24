@@ -36,9 +36,9 @@
 #' @examples
 #' \dontrun{
 #' 
-#'  output_list4 <- kmeansync(seu, csv='/path/to/hash_sampleABCD.csv', soup_k=4, res=TRUE)
+#'  output_list4 <- kmeansync(seu_ABCD, csv='/path/to/hash_sampleABCD.csv', soup_k=4, res=TRUE)
 #'  
-#'  seu6 <- kmeansync(seu, csv='/path/to/hash_sampleDEF.csv', soup_k=6, output_col='Sample_Assignment') 
+#'  seu6 <- kmeansync(seu_DEF, csv='/path/to/hash_sampleDEF.csv', soup_k=6, output_col='Sample_Assignment') 
 #'   
 #' }
 #'

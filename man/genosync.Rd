@@ -4,7 +4,7 @@
 \alias{genosync}
 \title{\code{genosync}}
 \usage{
-genosync(seu_obj, hash_csv, max_soup_run)
+genosync(seu_obj, hash_csv, max_soup_run=8)
 }
 \arguments{
 \item{seu_obj}{The input Seurat object. Must contain hash assay named \code{HTO} or \code{hto} in dgCMatrix format.
@@ -28,7 +28,7 @@ and outputs matching results. If there are no matches, all results will be outpu
 \examples{
 \dontrun{
 
- output_list <- genosync(seu, csv='/path/to/hash_sampleABCD.csv')
+ output_list <- genosync(seu_ABCD, hash_csv='/path/to/hash_sampleABCD.csv')
   
 }
 
