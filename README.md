@@ -13,14 +13,25 @@ Binary logistic regression is run for each genotype, and hashes are assigned bas
 
 ## Installation
 ```
+devtools::install_github('furlan-lab/genosyncR')
+library(genosyncR)
+```
+
+Or clone the repository:
+```
 git clone https://github.com/furlan-lab/genosyncR.git
+```
+
+```
+# install in R
+setwd('path/to/cloned/repository')
 devtools::install('genosyncR')
 library(genosyncR)
 ```
 
 ## Example
 ```
-results <- genosync(seu_obj=seu, hash_csv='hash_ABC.csv', max_soup_run=6)
+results <- genosync(seu_obj=seu_ABC, hash_csv='hash_ABC.csv', max_soup_run=6)
 results
 ```
 
