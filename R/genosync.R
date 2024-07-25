@@ -83,7 +83,7 @@ genosync <- function(seu_obj, hash_csv, soup_runs){
   
   # see if results match between any souporcell runs
   matches <- list()
-  for(soup_num in c(min_genos:8)){
+  for(soup_num in soup_runs){
     # ensure outputs exist
     if(!is.null(outs_kmean[[paste0('Soup_', soup_num)]]) && !is.null(outs_log[[paste0('Soup_', soup_num)]])){
       # sample dfs
