@@ -31,8 +31,8 @@ library(genosyncR)
 
 ## Example
 ```
-results <- genosync(seu_obj=seu_ABC, hash_csv='hash_ABC.csv', max_soup_run=6)
-results
+results_list <- genosync(seu_obj=seu_ABC, hash_csv='hash_ABC.csv', max_soup_run=6)
+results_list
 ```
 
 **Inputs:**
@@ -67,6 +67,10 @@ results
 **G.** Dataframe linking samples to genotypes. Consensus between kmeansync and logisync results was found for Souporcell = 3.
 
 
+
+
+Color palette provided by:
+Jake Lawlor (2020). PNWColors: Color Palettes Inspired by Nature in the US Pacific Northwest. R package version 0.1.0. https://CRAN.R-project.org/package=PNWColors
 
 
 
