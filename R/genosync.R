@@ -15,8 +15,8 @@
 #' 
 #' @param max_soup_run The highest Souporcell run, indicating the number of genotypes detected. Default is 8.
 #'
-#' @return If there are consensus matches, the kmeans and logistic results for those Souporcell runs will be returned.
-#' If there are no matches, all kmeans and logistic results will be output for all Souporcell runs.
+#' @return If there are consensus matches, the kmeans and logistic results for those Souporcell runs will be returned as a list.
+#' If there are no matches, all kmeans and logistic results will be output for all Souporcell runs as a list.
 #'
 #'
 #'

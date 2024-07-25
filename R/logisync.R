@@ -27,7 +27,7 @@
 #' Also returns a dataframe linking genotypes to samples, and a graph of the average marginal effects for each genotype.
 #'
 #' @return seu_obj Returns Seurat object with sample and hash labels by default. Note that multiplets have been excluded.
-#' If \code{res=TRUE}, additional dataframes and graphs are returned as well.
+#' If \code{res=TRUE}, additional dataframes and graphs are returned in a list along with the Seurat object.
 #'
 #'
 #'
