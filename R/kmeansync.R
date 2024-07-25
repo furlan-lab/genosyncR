@@ -88,7 +88,14 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   seu_obj <- ScaleData(seu_obj)
   
   # read in csv
-  hash_table <- read.csv(csv) 
+  # if hash_csv is df
+  if(is.data.frame(csv)){
+    hash_table <- csv
+    # if hash_csv is filepath 
+  }else{
+    if(file.exists(csv)){
+      hash_table <- read.csv(csv)
+    }}
   
   # preprocess data
   data <- Seurat::FetchData(seu_obj, c(unique(hash_table$Hash), geno_col))

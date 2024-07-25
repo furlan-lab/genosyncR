@@ -30,7 +30,7 @@ a graph of kmeans clustering, shaded with average hash per cluster.}
 }
 \value{
 seu_obj Returns Seurat object with sample and hash labels by default. Note that multiplets have been excluded.
-If \code{res=TRUE}, additional dataframes and graphs are returned as well.
+If \code{res=TRUE}, additional dataframes and graphs are returned in a list along with the Seurat object.
 }
 \description{
 \code{kmeansync} To demultiplex pooled samples, runs kmeans on hash data from an input Seurat object.

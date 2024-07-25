@@ -27,7 +27,7 @@ Also returns a dataframe linking genotypes to samples, and a graph of the averag
 }
 \value{
 seu_obj Returns Seurat object with sample and hash labels by default. Note that multiplets have been excluded.
-If \code{res=TRUE}, additional dataframes and graphs are returned as well.
+If \code{res=TRUE}, additional dataframes and graphs are returned in a list along with the Seurat object.
 }
 \description{
 \code{logisync} To demultiplex pooled samples, runs logistic regression on hash data from an input Seurat object.

@@ -35,8 +35,16 @@
 
 genosync <- function(seu_obj, hash_csv, max_soup_run=8){
   
+  # if hash_csv is df
+  if(is.data.frame(hash_csv)){
+    hashtable <- hash_csv
+  # if hash_csv is filepath 
+  }else{
+    if(file.exists(hash_csv)){
+    hashtable <- read.csv(hash_csv)
+    }}
+  
   # find min number for souporcell runs
-  hashtable <- read.csv(hash_csv) 
   min_genos <- length(unique(hashtable$Hash))
 
   # check if max_soup_run numbers are valid

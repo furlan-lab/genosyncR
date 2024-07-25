@@ -16,8 +16,8 @@ Assumes Souporcell was run renaming all multiplet designations to 'multiplet' (s
 \item{max_soup_run}{The highest Souporcell run, indicating the number of genotypes detected. Default is 8.}
 }
 \value{
-If there are consensus matches, the kmeans and logistic results for those Souporcell runs will be returned.
-If there are no matches, all kmeans and logistic results will be output for all Souporcell runs.
+If there are consensus matches, the kmeans and logistic results for those Souporcell runs will be returned as a list.
+If there are no matches, all kmeans and logistic results will be output for all Souporcell runs as a list.
 }
 \description{
 \code{genosync} To demultiplex pooled samples, this wrapper function runs two independent methods on hash data from

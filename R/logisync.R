@@ -73,7 +73,14 @@ logisync <- function(seu_obj, csv, soup_k, output_col='FinalAssignment', res=FAL
     stop('Input seurat object must contain a genotype assay named GENO or geno with the desired k value (ex: GENO5).')}
   
   # read in csv
-  hash_table <- read.csv(csv) 
+  # if hash_csv is df
+  if(is.data.frame(csv)){
+    hash_table <- csv
+    # if hash_csv is filepath 
+  }else{
+    if(file.exists(csv)){
+      hash_table <- read.csv(csv)
+    }}
   
   # set assay
   SeuratObject::DefaultAssay(seu_obj) <- "HTO"
