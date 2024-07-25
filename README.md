@@ -69,7 +69,10 @@ results_list
 
 
 
+
+
 Color palette provided by:
+
 Jake Lawlor (2020). PNWColors: Color Palettes Inspired by Nature in the US Pacific Northwest. R package version 0.1.0. https://CRAN.R-project.org/package=PNWColors
 
 
