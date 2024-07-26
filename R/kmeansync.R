@@ -45,7 +45,7 @@
 #' @importFrom dplyr filter mutate case_when rowwise group_by summarize_all mutate_all ungroup
 #' @import PNWColors
 #' @import factoextra
-#' @import umap
+#' @import uwot
 #' @import ggforce
 #' @import ggplot2
 #' @importFrom arules subset apriori lhs rhs inspect
@@ -97,16 +97,29 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
       hash_table <- read.csv(csv)
     }}
   
+  non_hto <- setdiff(unique(hash_table$Hash), unique(rownames(seu_obj@assays$HTO$counts)))
+  if(length(non_hto) > 0){
+    message('Unhashed data detected.')
+    unhashed <- non_hto
+    hashed <- unique(hash_table$Hash)[!(unique(hash_table$Hash) %in% non_hto)]
+
+  }else{
+      hashed <- unique(hash_table$Hash)
+    }
   # preprocess data
-  data <- Seurat::FetchData(seu_obj, c(unique(hash_table$Hash), geno_col))
+  key = Key(seu_obj[['HTO']])
+  data <- Seurat::FetchData(seu_obj, c(paste0(key, hashed), geno_col), assay='HTO')
   # convert to numeric for kmeans
   data[[geno_col]] <- as.numeric(data[[geno_col]])
-  
+  # remove key from colnames
+  hash_cols <- grep(key, colnames(data), value=TRUE)
+  colnames(data)[colnames(data) %in% hash_cols] <- gsub(key, "", hash_cols)
   # dimensionality reduction prior to kmeans
-  umap_res <- umap::umap(data)
+  set.seed(1234)
+  umap_res <- uwot::umap(data)
   
   # determine optimal k for kmeans
-  sil <- factoextra::fviz_nbclust(umap_res$layout, kmeans, method='silhouette', k.max=15, nstart = 250, iter.max = 10000) +
+  sil <- factoextra::fviz_nbclust(umap_res, kmeans, method='silhouette', k.max=15, nstart = 250, iter.max = 10000) +
     labs(subtitle = "Silhouette method")
   # get top k value
   optimal_k <- as.numeric(sil$data$clusters[which.max(sil$data$y)])
@@ -120,8 +133,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   }
   
   # kmeans
-  set.seed(1234)
-  kmeans_res <- kmeans(umap_res$layout, centers = optimal_k, iter.max=10000, nstart = 250)
+  kmeans_res <- kmeans(umap_res, centers = optimal_k, iter.max=10000, nstart = 250)
   data$cluster <- as.numeric(kmeans_res$cluster)
   
   # Assign hashes to kmeans clusters:
@@ -130,8 +142,14 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   
   # calculate average HTO enrichment per cluster
   ave_hash <- data %>% dplyr::select(which(numeric_hto_columns), cluster) %>% dplyr::group_by(cluster) %>% dplyr::summarize_all(mean, na.rm=TRUE)
+  print(ave_hash)
   # look at max in averages to define clusters
-  representative_HTO <- apply(ave_hash[, -1], 1, function(x) names(x)[which.max(x)])
+  representative_HTO <- apply(ave_hash[, -1], 1, function(x) { # account for unhashed
+                                                                if(max(x) < 0.1 | min(x) < 0.1){
+                                                                  if(!is.null(non_hto)){
+                                                                  return(non_hto)}
+                                                                }else{
+                                                                  return(names(x)[which.max(x)])}})
   
   # assign HTO to kmeans clusters
   cluster_assignments <- data.frame(
@@ -151,7 +169,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   # extract colors for hashes
   hash_colors <- cluster_assignments_col$colors
   # umap data
-  umap_data <- data.frame(UMAP1 = umap_res$layout[,1], UMAP2 = umap_res$layout[,2], cluster = data$cluster)
+  umap_data <- data.frame(UMAP1 = umap_res[,1], UMAP2 = umap_res[,2], cluster = data$cluster)
   umap_data <- base::merge(umap_data, cluster_assignments_col, by = "cluster")
   # umap colored by cluster
   graph <- ggplot2::ggplot(umap_data, aes(x = UMAP1, y = UMAP2, color = factor(cluster))) +
@@ -159,7 +177,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
     theme_minimal() +
     theme(legend.position = "right") +
     scale_color_manual(values = cluster_colors) +
-    labs(col = 'Cluster', title = paste0('UMAP with Kmeans Hash Assignment, Souporcell = ', optimal_k))
+    labs(col = 'Cluster', title = paste0('UMAP with Kmeans Hash Assignment, Souporcell = ', soup_k))
   
   # Add outline/background based on hash
   graph <- graph + 
@@ -178,6 +196,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   
   # if no significant rules found
   if(length(sig_rules)==0){
+    # add graphs
     return(paste0('No significant association rules found for Souporcell = ', soup_k))
   }else{
   # extract rule pairs
