@@ -108,6 +108,6 @@ genosync <- function(seu_obj, hash_csv, soup_runs){
     names(outs_kmean) <- paste0('kmeans_result_', names(outs_kmean))
     names(outs_log) <- paste0('log_result_', names(outs_log))
     
-    return(list(outs_kmean, outs_log))  
+    return(c(outs_kmean, outs_log))  
   }
 }
