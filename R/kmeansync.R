@@ -142,7 +142,8 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   
   # calculate average HTO enrichment per cluster
   ave_hash <- data %>% dplyr::select(which(numeric_hto_columns), cluster) %>% dplyr::group_by(cluster) %>% dplyr::summarize_all(mean, na.rm=TRUE)
-
+  print('Average Hash Enrichment')
+  print(ave_hash)
   # look at max in averages to define clusters
   representative_HTO <- apply(ave_hash[, -1], 1, function(x) { # account for unhashed
                                                                 if(max(x) < 0.1 | min(x) < 0.1){
@@ -155,7 +156,8 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   cluster_assignments <- data.frame(
     cluster = as.factor(1:nrow(kmeans_res$centers)),
     representative_HTO = representative_HTO)
-  
+  print('kmeans cluster assignments')
+  print(cluster_assignments)
   # UMAP K means cluster graph with hash assignments
   cluster_palette <- PNWColors::pnw_palette("Sailboat", optimal_k)
   # add color col to separate cluster_assignments df
