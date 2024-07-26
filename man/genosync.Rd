@@ -4,7 +4,7 @@
 \alias{genosync}
 \title{\code{genosync}}
 \usage{
-genosync(seu_obj, hash_csv, max_soup_run=8)
+genosync(seu_obj, hash_csv, soup_runs)
 }
 \arguments{
 \item{seu_obj}{The input Seurat object. Must contain hash assay named \code{HTO} or \code{hto} in dgCMatrix format.
@@ -13,7 +13,7 @@ Assumes Souporcell was run renaming all multiplet designations to 'multiplet' (s
 
 \item{hash_csv}{The input hash-sample csv file path. The csv must contain \code{Hash} and \code{Sample} columns.}
 
-\item{max_soup_run}{The highest Souporcell run, indicating the number of genotypes detected. Default is 8.}
+\item{soup_runs}{A numeric vector of Souporcell runs to iterate through, indicating the number of genotypes detected.}
 }
 \value{
 If there are consensus matches, the kmeans and logistic results for those Souporcell runs will be returned as a list.
@@ -28,7 +28,7 @@ and outputs matching results. If there are no matches, all results will be outpu
 \examples{
 \dontrun{
 
- output_list <- genosync(seu_ABCD, hash_csv='/path/to/hash_sampleABCD.csv')
+ output_list <- genosync(seu_ABCD, hash_csv='/path/to/hash_sampleABCD.csv', soup_runs=c(3:8))
   
 }
 

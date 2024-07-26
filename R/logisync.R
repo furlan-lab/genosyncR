@@ -92,7 +92,6 @@ logisync <- function(seu_obj, csv, soup_k, output_col='FinalAssignment', res=FAL
   # scale data 
   seu_obj <- ScaleData(seu_obj)
   
-  
   geno_col <- paste0('geno', soup_k)
   data <- Seurat::FetchData(seu_obj, c(unique(hash_table$Hash), geno_col))
   
@@ -101,16 +100,16 @@ logisync <- function(seu_obj, csv, soup_k, output_col='FinalAssignment', res=FAL
   data_encoded <- data
   for (genotype in data[[geno_col]]){  
     # add column for each genotype
-    data_encoded[[paste0('Soup_', genotype)]] <- dplyr::case_when(data[[geno_col]] == genotype ~ 1, 
+    data_encoded[[paste0('genotype_', genotype)]] <- dplyr::case_when(data[[geno_col]] == genotype ~ 1, 
                                                                   .default = 0)
     # add to column names list
-    encoded_genos <- unique(append(encoded_genos, list(paste0('Soup_', genotype))))
+    encoded_genos <- unique(append(encoded_genos, list(paste0('genotype_', genotype))))
   }
   
   # Check for imbalanced classes
   classes <- table(data[[geno_col]])
   proportions <- lapply(classes, function(col){col/sum(classes)})
-  names(proportions) <- paste0('Soup_', names(proportions))
+  names(proportions) <- paste0('genotype_', names(proportions))
   # threshold expected for balanced classes
   balanced_threshold <- 1 / length(encoded_genos)
   
@@ -166,21 +165,21 @@ logisync <- function(seu_obj, csv, soup_k, output_col='FinalAssignment', res=FAL
       sig <- '*'
     }
     
-    output <- rbind(output, data.frame(Soup = soup, Hash = margin_hash, FDR = df_dx[margin_hash, 'FDR'], Significance=sig))
+    output <- rbind(output, data.frame(Genotype = soup, Hash = margin_hash, FDR = df_dx[margin_hash, 'FDR'], Significance=sig))
     
     # marginal effects for plotting
-    df_dx$Soup <- soup
+    df_dx$Genotype <- soup
     df_dx$Hash <- rownames(df_dx)
     marginal_effects_list <- rbind(marginal_effects_list, df_dx)
   }
   
   # convert output genos to numeric
-  output$Soup <- sapply(strsplit(output$Soup, "_"), "[[", 2)
+  output$Genotype <- sapply(strsplit(output$Genotype, "_"), "[[", 2)
   # merge csv and output
   pivoted <- merge(hash_table, output %>% dplyr::select(-FDR, -Significance), by='Hash')
   
   # add hash and sample assignment columns to data
-  match_index <- match(data[[geno_col]], pivoted$Soup)
+  match_index <- match(data[[geno_col]], pivoted$Genotype)
   data <- data %>%
     mutate(HashAssignment = ifelse(!is.na(match_index), pivoted$Hash[match_index], NA_character_),
       FinalAssignment = ifelse(!is.na(match_index), pivoted$Sample[match_index], NA_character_))
@@ -191,16 +190,16 @@ logisync <- function(seu_obj, csv, soup_k, output_col='FinalAssignment', res=FAL
   
   # Plotting marginal effects: order by number
   marginal_effects_list <- marginal_effects_list %>%
-    mutate(Soup = factor(Soup, levels = sort(unique(Soup), method = "radix")))
+    mutate(Genotype = factor(Genotype, levels = sort(unique(Genotype), method = "radix")))
   marginal_effects_list$Hash <- factor(marginal_effects_list$Hash, 
                                        levels = unique(marginal_effects_list$Hash))
   
   # Plot the marginal effects
   pal <- PNWColors::pnw_palette("Sailboat", length(unique(hash_table$Hash)))
-  bar <- ggplot(marginal_effects_list, aes(x = Soup, y = df.dx, fill = Hash)) +
+  bar <- ggplot(marginal_effects_list, aes(x = Genotype, y = df.dx, fill = Hash)) +
     geom_bar(stat = "identity", position = "dodge") +
     labs(title = "Marginal Effects of Hashes on Genotype",
-         x = "Soup", y = "Marginal Effect") +
+         x = paste0("Souporcell k = ", soup_k), y = "Marginal Effect") +
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     scale_fill_manual(values=pal, name='Hash')  
@@ -211,16 +210,18 @@ logisync <- function(seu_obj, csv, soup_k, output_col='FinalAssignment', res=FAL
     # create final table linking soups to hashes
     final <- data.frame()
     for(hto in unique(output$Hash)){
-      matched_soups <- output[output$Hash == hto, "Soup"]
+      matched_soups <- output[output$Hash == hto, "Genotype"]
       # add soups to string
       soups_per_hash <- paste(matched_soups, collapse = ", ")
-      final <- rbind(final, data.frame(Hash=hto, Soup=soups_per_hash))
+      final <- rbind(final, data.frame(Hash=hto, Genotype=soups_per_hash))
     }
     
     # merge final and input csv
     association <- merge(hash_table, final, by=('Hash'))
-    
-    return(list(seu_obj, output, association, bar))
+  
+    out_list <- list(seu_obj, output, association, bar)
+    names(out_list) <- c("seurat_object", "significance_df", "final_df", "log_graph")
+    return(out_list)
     
     # return seu obj by default
   }else{

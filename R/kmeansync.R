@@ -159,7 +159,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
     theme_minimal() +
     theme(legend.position = "right") +
     scale_color_manual(values = cluster_colors) +
-    labs(col = 'Cluster', title = paste0('UMAP with Kmeans Hash Assignment, k = ', optimal_k))
+    labs(col = 'Cluster', title = paste0('UMAP with Kmeans Hash Assignment, Souporcell = ', optimal_k))
   
   # Add outline/background based on hash
   graph <- graph + 
@@ -216,7 +216,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
 
   # merge with hash assignments, rename columns
   HTO_map <- base::merge(pairs, cluster_assignments, by = "cluster", all.x = TRUE)
-  colnames(HTO_map) <- c('Kmeans', 'Soup', 'Hash')
+  colnames(HTO_map) <- c('Kmeans', 'Genotype', 'Hash')
 
   # merge with sample assignments from input csv
   association <- base::merge(hash_table, HTO_map, by='Hash')
@@ -237,14 +237,14 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
     # create final table linking soups to hashes (allowing for multiple soups/hash)
     final <- data.frame()
     for(hto in unique(association$Hash)){
-      matched_soups <- association[association$Hash == hto, "Soup"]
+      matched_soups <- association[association$Hash == hto, "Genotype"]
       # add unique soups to string
       soups_per_hash <- paste(unique(matched_soups), collapse = ", ")
-      final <- rbind(final, data.frame(Hash=hto, Soup=soups_per_hash))
+      final <- rbind(final, data.frame(Hash=hto, Genotype=soups_per_hash))
     }
     
     # assoc_output
-    association_out <- association[, c("Hash", "Sample", "Soup", "Kmeans")] 
+    association_out <- association[, c("Hash", "Sample", "Genotype", "Kmeans")] 
     # if a kmeans cluster wasn't assigned, add NA
     missing_clusters <- setdiff(1:optimal_k, unique(association_out$Kmeans))
     for(clust in missing_clusters){ 
@@ -261,7 +261,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
     for(geno in missing_genotype){
       new_row <- nrow(association_out) + 1
       # add missing genotype 
-      association_out[new_row,'Soup'] <- geno
+      association_out[new_row,'Genotype'] <- geno
       # fill rest with NA in quotes for aesthetics, since no association rules were found
       association_out[new_row,] <- replace(association_out[new_row,], is.na(association_out[new_row,]), 'NA')
     }
@@ -271,7 +271,9 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
     # contain output from rules
     inspect_rules <- capture.output(inspect(rules))
     # all results
-    return(list(seu_obj, association_out, assigned_df, noquote(inspect_rules), sil, graph))
+    out_list <- list(seu_obj, association_out, assigned_df, noquote(inspect_rules), sil, graph)
+    names(out_list) <- c("seurat_object", "association_df", "final_df", "rules", "sil_graph", "kmeans_graph")
+    return(out_list)
     
     # return seu obj by default
   }else{
