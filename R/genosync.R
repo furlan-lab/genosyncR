@@ -63,7 +63,7 @@ genosync <- function(seu_obj, hash_csv, soup_runs){
     outs_log[[paste0('Soup_', soup_num)]] <- logisync(seu_obj, csv=hash_csv, soup_k=soup_num, res=TRUE)
     message(strrep("_", 75))
   }
-  
+
   # ---------------------------------------------------------------------------------
   # helper function to reorder and compare assignments
   compare_samples <- function(df1, df2){
@@ -89,6 +89,10 @@ genosync <- function(seu_obj, hash_csv, soup_runs){
       # sample dfs
       kmean_df <- outs_kmean[[paste0('Soup_', soup_num)]][[3]]  
       log_df <- outs_log[[paste0('Soup_', soup_num)]][[3]]      
+      # if lengths differ 
+      if(nrow(kmean_df) != nrow(log_df)){
+        next
+      }
       
       # check matching
       if(compare_samples(kmean_df, log_df)){
