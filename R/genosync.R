@@ -56,7 +56,7 @@ genosync <- function(seu_obj, hash_csv, soup_runs){
   for(soup_num in soup_runs){
     message(paste0("\n", "Running kmeansync for souporcell = ", soup_num, "\n"))
     outs_kmean[[paste0('Soup_', soup_num)]] <- kmeansync(seu_obj, csv=hash_csv, soup_k=soup_num, res=TRUE)
-    if(is.character(outs_kmean[[paste0('Soup_', soup_num)]])){
+    if(is.character(outs_kmean[[paste0('Soup_', soup_num)]][[1]])){
       message(paste0('\n', 'No significant association rules found for Souporcell = ', soup_num))
     }
     message(paste0("\n", "Running logisync for souporcell = ", soup_num, "\n"))
@@ -84,7 +84,7 @@ genosync <- function(seu_obj, hash_csv, soup_runs){
   matches <- list()
   for(soup_num in soup_runs){
     # ensure outputs exist
-    if(!is.null(outs_kmean[[paste0('Soup_', soup_num)]]) && !is.character(outs_kmean[[paste0('Soup_', soup_num)]]) && 
+    if(!is.null(outs_kmean[[paste0('Soup_', soup_num)]]) && !is.character(outs_kmean[[paste0('Soup_', soup_num)]][[1]]) && 
        !is.null(outs_log[[paste0('Soup_', soup_num)]])){
       # sample dfs
       kmean_df <- outs_kmean[[paste0('Soup_', soup_num)]][[3]]  

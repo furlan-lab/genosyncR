@@ -84,7 +84,7 @@ logisync <- function(seu_obj, csv, soup_k, output_col='FinalAssignment', res=FAL
   
   non_hto <- setdiff(unique(hash_table$Hash), unique(rownames(seu_obj@assays$HTO$counts)))
   if(length(non_hto) > 0){
-    message('Unhashed data detected.')
+    message('Unhashed data detected \n')
     unhashed <- non_hto
     hashed <- unique(hash_table$Hash)[!(unique(hash_table$Hash) %in% non_hto)]
     

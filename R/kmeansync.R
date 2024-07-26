@@ -99,7 +99,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   
   non_hto <- setdiff(unique(hash_table$Hash), unique(rownames(seu_obj@assays$HTO$counts)))
   if(length(non_hto) > 0){
-    message('Unhashed data detected.')
+    message('Unhashed data detected \n')
     unhashed <- non_hto
     hashed <- unique(hash_table$Hash)[!(unique(hash_table$Hash) %in% non_hto)]
 
@@ -142,7 +142,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   
   # calculate average HTO enrichment per cluster
   ave_hash <- data %>% dplyr::select(which(numeric_hto_columns), cluster) %>% dplyr::group_by(cluster) %>% dplyr::summarize_all(mean, na.rm=TRUE)
-  print(ave_hash)
+
   # look at max in averages to define clusters
   representative_HTO <- apply(ave_hash[, -1], 1, function(x) { # account for unhashed
                                                                 if(max(x) < 0.1 | min(x) < 0.1){
@@ -188,16 +188,20 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   # apriori association between kmeans clusters and genotypes
   apriori_data <- data %>% dplyr::select(!!sym(geno_col), cluster) %>% dplyr::mutate_all(as.factor) %>% as("transactions")
   rules <- arules::apriori(apriori_data, parameter = list(support = 0.05, confidence = conf, minlen=2), control=list(verbose = FALSE))
-
+  
   # Link hashes to association results
   pairs <- data.frame() 
   # only keep rules with lift > 1.5 (indicates likelihood, 1 = not likely)
-  sig_rules <- arules::subset(rules, subset = lift > 1.5) 
+  sig_rules <- arules::subset(rules, subset = lift > 1.25) 
   
   # if no significant rules found
   if(length(sig_rules)==0){
-    # add graphs
-    return(paste0('No significant association rules found for Souporcell = ', soup_k))
+    # contain output from rules
+    nonsig_rules <- capture.output(inspect(rules))
+    out_list <- list(paste0('No significant association rules found for Souporcell = ', soup_k), ave_hash, noquote(nonsig_rules),
+                     sil, graph)
+    names(out_list) <- c('AssociationFailed', 'Average_Hash_Enrichment', 'insignificant_rules', 'sil_graph', 'kmeans_graph')
+    return(out_list)
   }else{
   # extract rule pairs
   for (i in 1:length(sig_rules)) {
