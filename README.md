@@ -2,7 +2,7 @@
 
 Demultiplex pooled samples from hash data with confidence. Two methods are incorporated in the genosync function: kmeans combined with apriori association analysis, and logistic regression. The outputs of these methods are benchmarked, increasing confidence in sample assignment results when the two independent methods agree.
 
-Multiple [Souporcell](https://github.com/wheaton5/souporcell) runs are iterated through to determine the number of genotypes that best fits the data. However, if the number of genotypes is known, it can be specified with the `max_soup_run` parameter. Souporcell multiplets are excluded from this analysis. 
+Multiple [Souporcell](https://github.com/wheaton5/souporcell) runs are iterated through to determine the number of genotypes that best fits the data. Souporcell multiplets are excluded from this analysis. 
     
 ### kmeansync    
 The optimal number of clusters for kmeans is selected with the silhouette method. Hashes are assigned to kmeans clusters based on the average hash enrichment in each cluster. Apriori association rules analysis
