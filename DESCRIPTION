@@ -19,7 +19,7 @@ Imports:
     dplyr,
     arules,
     PNWColors,
-    umap,
+    uwot,
     Seurat,
     SeuratObject,
     utils,
