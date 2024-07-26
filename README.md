@@ -31,7 +31,7 @@ library(genosyncR)
 
 ## Example
 ```
-results_list <- genosync(seu_obj=seu_ABC, hash_csv='hash_ABC.csv', max_soup_run=6)
+results_list <- genosync(seu_obj=seu_ABC, hash_csv='hash_ABC.csv', soup_runs=c(3:6))
 results_list
 ```
 
@@ -40,7 +40,7 @@ results_list
 * Hash-Sample csv
 
 ![csv](https://github.com/user-attachments/assets/0196f893-3172-4552-8a08-5c728eb2e59a)
-* Optional: Number of Souporcell runs to iterate through
+* Vector of Souporcell runs to iterate through
 
 
 **Outputs:**
