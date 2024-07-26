@@ -44,22 +44,21 @@ genosync <- function(seu_obj, hash_csv, soup_runs){
     hashtable <- read.csv(hash_csv)
     }}
   
-  # find min number for souporcell runs
-  # min_genos <- length(unique(hashtable$Hash))
-
   # check if max_soup_run numbers are valid
   patterns <- lapply(soup_runs, function(num){paste0('GENO', num)})
   matches <- sapply(patterns, function(pattern) any(grepl(pattern, names(seu_obj@assays), ignore.case = TRUE)))
   if(!all(matches)){
     stop('Input seurat object missing a genotype assay named GENO or geno with the desired k value (ex: GENO5). Check max_soup_run value.')}
-  
+
   outs_kmean <- list()
   outs_log <- list()
   # iterate over souporcell, run kmeans and log reg
   for(soup_num in soup_runs){
     message(paste0("\n", "Running kmeansync for souporcell = ", soup_num, "\n"))
     outs_kmean[[paste0('Soup_', soup_num)]] <- kmeansync(seu_obj, csv=hash_csv, soup_k=soup_num, res=TRUE)
-    
+    if(is.character(outs_kmean[[paste0('Soup_', soup_num)]])){
+      message(paste0('\n', 'No significant association rules found for Souporcell = ', soup_num))
+    }
     message(paste0("\n", "Running logisync for souporcell = ", soup_num, "\n"))
     outs_log[[paste0('Soup_', soup_num)]] <- logisync(seu_obj, csv=hash_csv, soup_k=soup_num, res=TRUE)
     message(strrep("_", 75))
@@ -85,7 +84,8 @@ genosync <- function(seu_obj, hash_csv, soup_runs){
   matches <- list()
   for(soup_num in soup_runs){
     # ensure outputs exist
-    if(!is.null(outs_kmean[[paste0('Soup_', soup_num)]]) && !is.null(outs_log[[paste0('Soup_', soup_num)]])){
+    if(!is.null(outs_kmean[[paste0('Soup_', soup_num)]]) && !is.character(outs_kmean[[paste0('Soup_', soup_num)]]) && 
+       !is.null(outs_log[[paste0('Soup_', soup_num)]])){
       # sample dfs
       kmean_df <- outs_kmean[[paste0('Soup_', soup_num)]][[3]]  
       log_df <- outs_log[[paste0('Soup_', soup_num)]][[3]]      

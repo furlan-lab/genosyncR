@@ -170,11 +170,16 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   # apriori association between kmeans clusters and genotypes
   apriori_data <- data %>% dplyr::select(!!sym(geno_col), cluster) %>% dplyr::mutate_all(as.factor) %>% as("transactions")
   rules <- arules::apriori(apriori_data, parameter = list(support = 0.05, confidence = conf, minlen=2), control=list(verbose = FALSE))
- 
+
   # Link hashes to association results
   pairs <- data.frame() 
   # only keep rules with lift > 1.5 (indicates likelihood, 1 = not likely)
   sig_rules <- arules::subset(rules, subset = lift > 1.5) 
+  
+  # if no significant rules found
+  if(length(sig_rules)==0){
+    return(paste0('No significant association rules found for Souporcell = ', soup_k))
+  }else{
   # extract rule pairs
   for (i in 1:length(sig_rules)) {
     lhs_string <- as(lhs(sig_rules[i]), 'list')
@@ -278,6 +283,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
     # return seu obj by default
   }else{
     return(seu_obj)
+  }
   }
 }
 
