@@ -132,6 +132,13 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
     message(paste0('Number of clusters selected for kmeans: ', optimal_k))
   }
   
+  # optionally override clusters
+  var=NULL
+  var = readline(prompt = "Override kmeans optimal k clusters if desired (hit Enter to skip): ");
+  if(var != "" && toupper(var) != "NULL"){
+    optimal_k = as.integer(var)}
+  
+  
   # kmeans
   kmeans_res <- kmeans(umap_res, centers = optimal_k, iter.max=10000, nstart = 250)
   data$cluster <- as.numeric(kmeans_res$cluster)
@@ -139,7 +146,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   # Assign hashes to kmeans clusters:
   hto_columns <- setdiff(colnames(data), c('cluster', geno_col))
   numeric_hto_columns <- sapply(data[hto_columns], is.numeric)
-  
+ 
   # calculate average HTO enrichment per cluster
   ave_hash <- data %>% dplyr::select(which(numeric_hto_columns), cluster) %>% dplyr::group_by(cluster) %>% dplyr::summarize_all(mean, na.rm=TRUE)
   print('Average Hash Enrichment')
@@ -160,6 +167,9 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   print(cluster_assignments)
   # UMAP K means cluster graph with hash assignments
   cluster_palette <- PNWColors::pnw_palette("Sailboat", optimal_k)
+  cluster_palette <- c('#6e7cb9', '#7bbcd5','#f5db99', '#d2848d', '#d0e4af',  '#11c2b5', '#516823', 
+                       '#cb74ad', '#bf9bdd', '#4a9152', '#6A3D9A', 'maroon4', '#e6194B',
+                       'navy', '#cde519', 'orange', 'yellow4') 
   # add color col to separate cluster_assignments df
   cluster_assignments_col <- cluster_assignments %>% mutate(colors=cluster_palette[1:nrow(cluster_assignments)])
   # order by cluster
