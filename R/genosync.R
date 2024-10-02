@@ -14,6 +14,9 @@
 #' @param hash_csv The input hash-sample csv file path, or a hash-sample dataframe. The dataframe must contain \code{Hash} and \code{Sample} columns.
 #' 
 #' @param soup_runs A numeric vector of Souporcell runs to iterate through, indicating the number of genotypes detected.
+#' 
+#' @param override_kmeans Boolean providing an option to manually override the optimal number of clusters for kmeans.
+#' Default is FALSE. 
 #'
 #' @return If there are consensus matches, the kmeans and logistic results for those Souporcell runs will be returned as a list.
 #' If there are no matches, all kmeans and logistic results will be output for all Souporcell runs as a list.
@@ -25,7 +28,7 @@
 #' 
 #'  output_list_ABCD <- genosync(seu_ABCD, hash_csv='/path/to/hash_sampleABCD.csv', soup_runs=c(4:8))
 #'   
-#'  output_list_DEF <- genosync(seu_DEF, hash_csv=hash_DEF_df, soup_runs=3:8)
+#'  output_list_DEF <- genosync(seu_DEF, hash_csv=hash_DEF_df, soup_runs=3:8, override_kmeans=TRUE)
 #'   
 #' }
 #'
@@ -35,7 +38,7 @@
 #' 
 #' @export
 
-genosync <- function(seu_obj, hash_csv, soup_runs){
+genosync <- function(seu_obj, hash_csv, soup_runs, override_kmeans=FALSE){
   
   # if hash_csv is df
   if(is.data.frame(hash_csv)){
@@ -57,7 +60,7 @@ genosync <- function(seu_obj, hash_csv, soup_runs){
   # iterate over souporcell, run kmeans and log reg
   for(soup_num in soup_runs){
     message(paste0("\n", "Running kmeansync for souporcell = ", soup_num, "\n"))
-    outs_kmean[[paste0('Soup_', soup_num)]] <- kmeansync(seu_obj, csv=hash_csv, soup_k=soup_num, res=TRUE)
+    outs_kmean[[paste0('Soup_', soup_num)]] <- kmeansync(seu_obj, csv=hash_csv, soup_k=soup_num, override=override_kmeans, res=TRUE)
     if(is.character(outs_kmean[[paste0('Soup_', soup_num)]])){
       message(paste0('\n', 'No significant association rules found for Souporcell = ', soup_num))
     }

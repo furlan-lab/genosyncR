@@ -22,6 +22,9 @@
 #'
 #' @param output_col The name for the sample assignments column that will be added to the output Seurat object.
 #' Default is \code{FinalAssignment}.
+#' 
+#' @param override Boolean providing an option to manually override the optimal number of clusters for kmeans.
+#' Default is FALSE. 
 #'
 #' @param res Boolean indicating additional results output. Default is FALSE. If TRUE, Seurat object with sample 
 #' and hash labels will be returned, along with a dataframe linking kmeans clusters to genotypes, a dataframe 
@@ -38,7 +41,7 @@
 #' 
 #'  output_list4 <- kmeansync(seu_ABCD, csv='/path/to/hash_sampleABCD.csv', soup_k=4, res=TRUE)
 #'  
-#'  output_list3 <- kmeansync(seu_ABC, csv=hash_ABC_df, soup_k=3)
+#'  output_list3 <- kmeansync(seu_ABC, csv=hash_ABC_df, soup_k=3, override=TRUE)
 #'  
 #'  seu6 <- kmeansync(seu_DEF, csv='/path/to/hash_sampleDEF.csv', soup_k=6, output_col='Sample_Assignment') 
 #'   
@@ -59,7 +62,7 @@
 #' 
 #' @export
 
-kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignment', res=FALSE){
+kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignment', override=FALSE, res=FALSE){
   
   UMAP1 <- UMAP2 <- lift <- cluster <- NULL
   
@@ -122,10 +125,11 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   }
   
   # optionally override clusters
+  if(override){
   var=NULL
   var = readline(prompt = "Override kmeans optimal k clusters if desired (hit Enter to skip): ");
   if(var != "" && toupper(var) != "NULL"){
-    optimal_k = as.integer(var)}
+    optimal_k = as.integer(var)}}
   
   
   # kmeans
@@ -148,7 +152,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
     representative_HTO = representative_HTO)
   
   # UMAP K means cluster graph with hash assignments
-  cluster_palette <- c('#6e7cb9', '#7bbcd5','#f5db99', '#d2848d', '#d0e4af',  '#11c2b5', '#516823', 
+  cluster_palette <- c('#6e7cb9', '#f5db99', '#d2848d', '#7bbcd5', '#d0e4af',  '#11c2b5', '#516823', 
                        '#cb74ad', '#bf9bdd', '#4a9152', '#6A3D9A', 'maroon4', '#e6194B',
                        'navy', '#cde519', 'orange', 'yellow4') 
   # add color col to separate cluster_assignments df
