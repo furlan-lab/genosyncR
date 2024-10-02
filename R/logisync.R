@@ -82,16 +82,6 @@ logisync <- function(seu_obj, csv, soup_k, output_col='FinalAssignment', res=FAL
       hash_table <- read.csv(csv)
     }}
   
-  non_hto <- setdiff(unique(hash_table$Hash), unique(rownames(seu_obj@assays$HTO$counts)))
-  if(length(non_hto) > 0){
-    message('Unhashed data detected.')
-    unhashed <- non_hto
-    hashed <- unique(hash_table$Hash)[!(unique(hash_table$Hash) %in% non_hto)]
-    
-  }else{
-    hashed <- unique(hash_table$Hash)
-  }
-  
   # set assay
   SeuratObject::DefaultAssay(seu_obj) <- "HTO"
   # remove multiplets (avoid noise when assigning hashes)
@@ -103,11 +93,7 @@ logisync <- function(seu_obj, csv, soup_k, output_col='FinalAssignment', res=FAL
   seu_obj <- ScaleData(seu_obj)
   
   geno_col <- paste0('geno', soup_k)
-  key = Key(seu_obj[['HTO']])
-  data <- Seurat::FetchData(seu_obj, c(paste0(key, hashed), geno_col), assay='HTO')
-  # remove key from colnames
-  hash_cols <- grep(key, colnames(data), value=TRUE)
-  colnames(data)[colnames(data) %in% hash_cols] <- gsub(key, "", hash_cols)
+  data <- Seurat::FetchData(seu_obj, c(unique(hash_table$Hash), geno_col))
   
   # one-hot encoding
   encoded_genos <- list()
@@ -133,7 +119,7 @@ logisync <- function(seu_obj, csv, soup_k, output_col='FinalAssignment', res=FAL
   stderr <- list()
   
   # extract hashes
-  hash_form <- paste("~ ", paste(hashed, collapse = " + "), sep = "")
+  hash_form <- paste("~ ", paste(unique(hash_table$Hash), collapse = " + "), sep = "")
   # log reg/firth log reg per genotype
   for(col in encoded_genos){
     model_form <- as.formula(paste(factor(col), hash_form))
