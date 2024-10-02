@@ -148,7 +148,6 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
     representative_HTO = representative_HTO)
   
   # UMAP K means cluster graph with hash assignments
-  cluster_palette <- PNWColors::pnw_palette("Sailboat", optimal_k)
   cluster_palette <- c('#6e7cb9', '#7bbcd5','#f5db99', '#d2848d', '#d0e4af',  '#11c2b5', '#516823', 
                        '#cb74ad', '#bf9bdd', '#4a9152', '#6A3D9A', 'maroon4', '#e6194B',
                        'navy', '#cde519', 'orange', 'yellow4') 
