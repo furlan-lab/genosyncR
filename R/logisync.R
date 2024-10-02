@@ -87,13 +87,13 @@ logisync <- function(seu_obj, csv, soup_k, output_col='FinalAssignment', res=FAL
   # set assay
   SeuratObject::DefaultAssay(seu_obj) <- "HTO"
   # remove multiplets (avoid noise when assigning hashes)
+  geno_col <- paste0('geno', soup_k)
   seu_obj <- subset(seu_obj, cells=which(seu_obj@meta.data[[geno_col]] != 'Multiplet'))
   # normalize data 
   seu_obj <- NormalizeData(seu_obj, normalization.method = "CLR", margin = 1)
   # scale data 
   seu_obj <- ScaleData(seu_obj)
   
-  geno_col <- paste0('geno', soup_k)
   data <- Seurat::FetchData(seu_obj, c(unique(hash_table$Hash), geno_col))
   
   # one-hot encoding
