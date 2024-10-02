@@ -163,7 +163,7 @@ kmeansync <- function(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignmen
   # extract colors for hashes
   hash_colors <- cluster_assignments_col$colors
   # umap data
-  umap_data <- data.frame(UMAP1 = umap_res$layout[,1], UMAP2 = umap_res$layout[,2], cluster = data$cluster)
+  umap_data <- data.frame(UMAP1 = umap_res$layout[,1], UMAP2 = umap_res$layout[,2], cluster = data$cluster, stringsAsFactors = FALSE)
   umap_data <- base::merge(umap_data, cluster_assignments_col, by = "cluster")
   # umap colored by cluster
   graph <- ggplot2::ggplot(umap_data, aes(x = UMAP1, y = UMAP2, color = factor(cluster))) +
