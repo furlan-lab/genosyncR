@@ -12,7 +12,7 @@
 #' Assumes Souporcell was run renaming all multiplet designations to 'multiplet' (see [viewmastR::add_souporcell_seurat()]
 #' documentation).
 #'
-#' @param csv The input hash-sample csv file path. The csv must contain \code{Hash} and \code{Sample} columns.
+#' @param csv The input hash-sample csv file path, or a hash-sample dataframe. The dataframe must contain \code{Hash} and \code{Sample} columns.
 #'
 #' @param soup_k The desired Souporcell run, indicating the number of genotypes detected. The appropriate 
 #' number of genotypes expected for the data should be determined prior to running kmeansync. 
@@ -37,6 +37,8 @@
 #' \dontrun{
 #' 
 #'  output_list4 <- kmeansync(seu_ABCD, csv='/path/to/hash_sampleABCD.csv', soup_k=4, res=TRUE)
+#'  
+#'  output_list3 <- kmeansync(seu_ABC, csv=hash_ABC_df, soup_k=3)
 #'  
 #'  seu6 <- kmeansync(seu_DEF, csv='/path/to/hash_sampleDEF.csv', soup_k=6, output_col='Sample_Assignment') 
 #'   

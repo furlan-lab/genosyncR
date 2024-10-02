@@ -11,7 +11,7 @@
 #' Must contain Souporcell genotype assays named \code{GENO} or \code{geno} with the desired k value (ex: \code{GENO5}). 
 #' Assumes Souporcell was run renaming all multiplet designations to 'multiplet' (see [viewmastR::add_souporcell_seurat()]).
 #'
-#' @param hash_csv The input hash-sample csv file path. The csv must contain \code{Hash} and \code{Sample} columns.
+#' @param hash_csv The input hash-sample csv file path, or a hash-sample dataframe. The dataframe must contain \code{Hash} and \code{Sample} columns.
 #' 
 #' @param soup_runs A numeric vector of Souporcell runs to iterate through, indicating the number of genotypes detected.
 #'
@@ -23,7 +23,9 @@
 #' @examples
 #' \dontrun{
 #' 
-#'  output_list <- genosync(seu_ABCD, hash_csv='/path/to/hash_sampleABCD.csv', soup_runs=c(3:8))
+#'  output_list_ABCD <- genosync(seu_ABCD, hash_csv='/path/to/hash_sampleABCD.csv', soup_runs=c(4:8))
+#'   
+#'  output_list_DEF <- genosync(seu_DEF, hash_csv=hash_DEF_df, soup_runs=3:8)
 #'   
 #' }
 #'
