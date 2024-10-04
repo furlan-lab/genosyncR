@@ -5,7 +5,7 @@
 #' The second method runs binary logistic regression, [logisync()]. Compares both methods for all Souporcell runs,
 #' and outputs matching results. If there are no matches, all results will be output. 
 #'
-#' @usage genosync(seu_obj, hash_csv, soup_runs)
+#' @usage genosync(seu_obj, hash_csv, soup_runs, override_kmeans=FALSE)
 #'
 #' @param seu_obj The input Seurat object. Must contain hash assay named \code{HTO} or \code{hto} in dgCMatrix format.
 #' Must contain Souporcell genotype assays named \code{GENO} or \code{geno} with the desired k value (ex: \code{GENO5}). 

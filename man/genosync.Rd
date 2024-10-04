@@ -4,16 +4,19 @@
 \alias{genosync}
 \title{\code{genosync}}
 \usage{
-genosync(seu_obj, hash_csv, soup_runs)
+genosync(seu_obj, hash_csv, soup_runs, override_kmeans=FALSE)
 }
 \arguments{
 \item{seu_obj}{The input Seurat object. Must contain hash assay named \code{HTO} or \code{hto} in dgCMatrix format.
 Must contain Souporcell genotype assays named \code{GENO} or \code{geno} with the desired k value (ex: \code{GENO5}).
 Assumes Souporcell was run renaming all multiplet designations to 'multiplet' (see \code{\link[viewmastR:add_souporcell_seurat]{viewmastR::add_souporcell_seurat()}}).}
 
-\item{hash_csv}{The input hash-sample csv file path. The csv must contain \code{Hash} and \code{Sample} columns.}
+\item{hash_csv}{The input hash-sample csv file path, or a hash-sample dataframe. The dataframe must contain \code{Hash} and \code{Sample} columns.}
 
 \item{soup_runs}{A numeric vector of Souporcell runs to iterate through, indicating the number of genotypes detected.}
+
+\item{override_kmeans}{Boolean providing an option to manually override the optimal number of clusters for kmeans.
+Default is FALSE.}
 }
 \value{
 If there are consensus matches, the kmeans and logistic results for those Souporcell runs will be returned as a list.
@@ -28,7 +31,9 @@ and outputs matching results. If there are no matches, all results will be outpu
 \examples{
 \dontrun{
 
- output_list <- genosync(seu_ABCD, hash_csv='/path/to/hash_sampleABCD.csv', soup_runs=c(3:8))
+ output_list_ABCD <- genosync(seu_ABCD, hash_csv='/path/to/hash_sampleABCD.csv', soup_runs=c(4:8))
+  
+ output_list_DEF <- genosync(seu_DEF, hash_csv=hash_DEF_df, soup_runs=3:8, override_kmeans=TRUE)
   
 }
 

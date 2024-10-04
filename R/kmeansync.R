@@ -4,8 +4,8 @@
 #' Hashes are assigned to kmeans clusters based on the average hash enrichment in each cluster. Apriori association rules 
 #' link hashes from kmeans clusters to Souporcell genotypes. Then, genotypes can be linked to samples via the input hash-sample csv. 
 #'
-#' @usage kmeansync(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignment', res=FALSE)
-
+#' @usage kmeansync(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignment', override=FALSE, 
+#'                  res=FALSE)
 #'
 #' @param seu_obj The input Seurat object. Must contain hash assay named \code{HTO} or \code{hto} in dgCMatrix format.
 #' Must contain Souporcell genotype assay(s) named \code{GENO} or \code{geno} with the desired k value (ex: \code{GENO5}). 
@@ -43,7 +43,8 @@
 #'  
 #'  output_list3 <- kmeansync(seu_ABC, csv=hash_ABC_df, soup_k=3, override=TRUE)
 #'  
-#'  seu6 <- kmeansync(seu_DEF, csv='/path/to/hash_sampleDEF.csv', soup_k=6, output_col='Sample_Assignment') 
+#'  seu6 <- kmeansync(seu_DEF, csv='/path/to/hash_sampleDEF.csv', soup_k=6, 
+#'                    output_col='Sample_Assignment') 
 #'   
 #' }
 #'

@@ -4,7 +4,8 @@
 \alias{kmeansync}
 \title{\code{kmeansync}}
 \usage{
-kmeansync(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignment', res=FALSE)
+kmeansync(seu_obj, csv, soup_k, conf=0.8, output_col='FinalAssignment', override=FALSE, 
+                 res=FALSE)
 }
 \arguments{
 \item{seu_obj}{The input Seurat object. Must contain hash assay named \code{HTO} or \code{hto} in dgCMatrix format.
@@ -12,7 +13,7 @@ Must contain Souporcell genotype assay(s) named \code{GENO} or \code{geno} with 
 Assumes Souporcell was run renaming all multiplet designations to 'multiplet' (see \code{\link[viewmastR:add_souporcell_seurat]{viewmastR::add_souporcell_seurat()}}
 documentation).}
 
-\item{csv}{The input hash-sample csv file path. The csv must contain \code{Hash} and \code{Sample} columns.}
+\item{csv}{The input hash-sample csv file path, or a hash-sample dataframe. The dataframe must contain \code{Hash} and \code{Sample} columns.}
 
 \item{soup_k}{The desired Souporcell run, indicating the number of genotypes detected. The appropriate
 number of genotypes expected for the data should be determined prior to running kmeansync.}
@@ -22,6 +23,9 @@ Default is 0.8, as recommended.}
 
 \item{output_col}{The name for the sample assignments column that will be added to the output Seurat object.
 Default is \code{FinalAssignment}.}
+
+\item{override}{Boolean providing an option to manually override the optimal number of clusters for kmeans.
+Default is FALSE.}
 
 \item{res}{Boolean indicating additional results output. Default is FALSE. If TRUE, Seurat object with sample
 and hash labels will be returned, along with a dataframe linking kmeans clusters to genotypes, a dataframe
@@ -42,7 +46,10 @@ link hashes from kmeans clusters to Souporcell genotypes. Then, genotypes can be
 
  output_list4 <- kmeansync(seu_ABCD, csv='/path/to/hash_sampleABCD.csv', soup_k=4, res=TRUE)
  
- seu6 <- kmeansync(seu_DEF, csv='/path/to/hash_sampleDEF.csv', soup_k=6, output_col='Sample_Assignment') 
+ output_list3 <- kmeansync(seu_ABC, csv=hash_ABC_df, soup_k=3, override=TRUE)
+ 
+ seu6 <- kmeansync(seu_DEF, csv='/path/to/hash_sampleDEF.csv', soup_k=6, 
+                   output_col='Sample_Assignment') 
   
 }
 
