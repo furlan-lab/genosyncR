@@ -38,7 +38,8 @@
 #'  
 #'  output_list3 <- logisync(seu_ABC, csv=hash_ABC_df, soup_k=3)
 #'  
-#'  seu5 <- logisync(seu_DEF, csv='/path/to/hash_sampleDEF.csv', soup_k=5, output_col='Sample_Assignment') 
+#'  seu5 <- logisync(seu_DEF, csv='/path/to/hash_sampleDEF.csv', soup_k=5, 
+#'                   output_col='Sample_Assignment') 
 #'   
 #' }
 #'
@@ -56,7 +57,7 @@
 
 logisync <- function(seu_obj, csv, soup_k, output_col='FinalAssignment', res=FALSE){
   
-  FDR <- Significance <- df.dx <- Soup <- Hash <- NULL
+  FDR <- Significance <- Genotype <- df.dx <- Soup <- Hash <- NULL
   
   if(!inherits(seu_obj, 'Seurat')){
     stop('Input must be a seurat object.')}
