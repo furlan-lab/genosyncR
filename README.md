@@ -37,7 +37,7 @@ results_list
 
 **Inputs:**
 * Seurat object with Souporcell and HTO assays (see [viewmastR](https://furlan-lab.github.io/viewmastR/reference/add_souporcell_seurat.html)), subset to desired samples
-* Hash-Sample csv
+* Hash-Sample csv or dataframe
 
 ![csv](https://github.com/user-attachments/assets/0196f893-3172-4552-8a08-5c728eb2e59a)
 * Vector of Souporcell runs to iterate through
